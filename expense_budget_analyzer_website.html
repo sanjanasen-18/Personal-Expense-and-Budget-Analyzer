@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Expense & Budget Analyzer</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b30;--panel2:#18233b;--line:#263653;--text:#edf3ff;--muted:#9aabc8;--accent:#75a7ff;--green:#55d6a1;--red:#ff7185;--yellow:#ffd166}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#172b50 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,Segoe UI,Arial,sans-serif}
+header{padding:28px max(5vw,22px) 22px;border-bottom:1px solid var(--line);background:#0b1020dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(14px)}
+.top{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#78aaff,#9c7bff);display:grid;place-items:center;font-size:22px;color:#081126}.brand h1{font-size:18px;margin:0}.brand small{color:var(--muted)}
+nav{display:flex;gap:7px;flex-wrap:wrap}nav a{color:var(--muted);text-decoration:none;padding:8px 11px;border-radius:9px;font-size:13px}nav a:hover,nav a.active{background:var(--panel2);color:var(--text)}
+main{max-width:1200px;margin:30px auto;padding:0 22px 70px}.hero{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 0 30px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:2px;font-size:11px;font-weight:800}.hero h2{font-size:clamp(28px,4vw,44px);line-height:1.1;margin:9px 0 12px;max-width:700px}.hero p{color:var(--muted);max-width:650px;margin:0}.hero-mark{font-size:76px;filter:drop-shadow(0 12px 30px #527fff55)}
+section{scroll-margin-top:115px;margin-top:34px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:15px}.section-head h2{margin:0;font-size:22px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.card{background:linear-gradient(145deg,var(--panel),#10182b);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}.metric-label{color:var(--muted);font-size:12px}.metric{font-size:27px;font-weight:750;margin:6px 0 2px;letter-spacing:-.7px}.metric-sub{font-size:12px;color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}
+.two{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+label{display:block;color:var(--muted);font-size:12px;margin:0 0 6px}input,select,textarea{width:100%;background:#0d1527;border:1px solid var(--line);border-radius:9px;padding:11px;color:var(--text);font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent)}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field.full{grid-column:1/-1}.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--accent);color:#081326}.btn:hover{filter:brightness(1.1)}.btn.secondary{background:#263653;color:var(--text)}.btn.danger{background:#512638;color:#ffdce2}.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.progress{height:10px;background:#263653;border-radius:99px;overflow:hidden;margin:12px 0 7px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#55d6a1,#75a7ff);border-radius:99px;transition:width .3s}.progress.over span{background:var(--red)}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin-bottom:12px}.toolbar>div{min-width:140px;flex:1}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600;background:#111a2d}tr:last-child td{border-bottom:0}.tag{display:inline-block;padding:3px 8px;border-radius:99px;background:#243552;color:#b9d1ff;font-size:11px}.empty{text-align:center;color:var(--muted);padding:28px}
+.bar-row{display:grid;grid-template-columns:105px 1fr 90px;gap:10px;align-items:center;margin:12px 0;font-size:12px}.bar{height:9px;border-radius:99px;background:#263653;overflow:hidden}.bar span{height:100%;display:block;background:linear-gradient(90deg,#7aaaff,#a18bff);border-radius:99px}.bar-row strong{text-align:right}
+.info-card h3{margin:0 0 7px;font-size:15px}.info-card p,.info-card li{color:var(--muted);font-size:13px}.info-card ul{padding-left:18px;margin:8px 0}.step{display:flex;gap:12px;align-items:flex-start;margin:12px 0}.num{flex:0 0 28px;height:28px;border-radius:9px;background:#263c60;color:#b9d1ff;display:grid;place-items:center;font-weight:800}.notice{padding:12px 14px;background:#182a43;border:1px solid #2d4a72;border-radius:11px;color:#c9d9f4;font-size:13px}
+footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.three{grid-template-columns:1fr}.hero-mark{display:none}}
+@media(max-width:520px){header{position:static}.grid{grid-template-columns:1fr 1fr}.metric{font-size:21px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding-top:12px}nav{width:100%}nav a{padding:7px 8px}}
+</style>
+</head>
+<body>
+<header><div class="top">
+ <div class="brand"><div class="logo">₹</div><div><h1>Expense & Budget Analyzer</h1><small>Personal finance • Milestone 2 project</small></div></div>
+ <nav><a href="#dashboard">Dashboard</a><a href="#transactions">Expenses</a><a href="#insights">Insights</a><a href="#project">Project</a><a href="#data">CSV Data</a></nav>
+</div></header>
+<main>
+<div class="hero"><div><div class="eyebrow">Bennett University · 2026–27</div><h2>Know where your money goes.</h2><p>Record expenses, monitor your budget, and turn individual transactions into useful spending insights. Your entries stay in this browser unless you export them.</p></div><div class="hero-mark">📊</div></div>
+
+<section id="dashboard">
+ <div class="section-head"><div><h2>Dashboard</h2><p>Your current spending snapshot</p></div><button class="btn secondary" onclick="setDemo()">Load sample data</button></div>
+ <div class="grid">
+  <div class="card"><div class="metric-label">Monthly budget</div><div class="metric" id="budgetMetric">₹0.00</div><div class="metric-sub">Budget set below</div></div>
+  <div class="card"><div class="metric-label">Total expenses</div><div class="metric" id="totalMetric">₹0.00</div><div class="metric-sub" id="expenseCount">0 records</div></div>
+  <div class="card"><div class="metric-label">Remaining budget</div><div class="metric" id="remainingMetric">₹0.00</div><div class="metric-sub" id="remainingText">Available to spend</div></div>
+  <div class="card"><div class="metric-label">Highest-spending category</div><div class="metric" id="topMetric">—</div><div class="metric-sub" id="topAmount">No expenses yet</div></div>
+ </div>
+ <div class="two" style="margin-top:14px">
+  <div class="card"><h3 style="margin-top:0">Budget monitor</h3><div style="display:flex;justify-content:space-between;gap:12px"><span class="metric-label">Budget used</span><strong id="usageText">0%</strong></div><div class="progress" id="budgetProgress"><span id="progressFill"></span></div><div class="metric-sub" id="budgetMessage">Set a budget to begin tracking.</div></div>
+  <div class="card"><h3 style="margin-top:0">Set your budget</h3><label for="budgetInput">Monthly budget (₹)</label><input id="budgetInput" type="number" min="0" step="0.01" placeholder="e.g. 15000"><div class="actions"><button class="btn" onclick="saveBudget()">Save budget</button></div></div>
+ </div>
+</section>
+
+<section id="transactions">
+ <div class="section-head"><div><h2>Expense manager</h2><p>Add, review, edit, and remove expense records.</p></div></div>
+ <div class="two">
+  <div class="card"><h3 id="formTitle" style="margin-top:0">Add an expense</h3>
+   <form id="expenseForm" onsubmit="saveExpense(event)"><input type="hidden" id="editId">
+    <div class="form-grid">
+     <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+     <div class="field"><label for="amount">Amount (₹)</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div>
+     <div class="field"><label for="category">Category</label><select id="category" required><option value="">Choose category</option><option>Food</option><option>Transport</option><option>Education</option><option>Shopping</option><option>Entertainment</option><option>Bills</option><option>Health</option><option>Other</option></select></div>
+     <div class="field"><label for="description">Description</label><input id="description" maxlength="100" placeholder="e.g. Lunch, bus fare"></div>
+    </div><div class="actions"><button class="btn" type="submit" id="submitExpense">Add expense</button><button class="btn ghost" type="button" onclick="resetForm()">Clear</button></div>
+   </form>
+  </div>
+  <div class="card"><h3 style="margin-top:0">Quick filters</h3>
+   <div class="field"><label for="filterMonth">Month</label><input id="filterMonth" type="month" onchange="render()"></div>
+   <div class="field" style="margin-top:12px"><label for="filterCategory">Category</label><select id="filterCategory" onchange="render()"><option value="">All categories</option><option>Food</option><option>Transport</option><option>Education</option><option>Shopping</option><option>Entertainment</option><option>Bills</option><option>Health</option><option>Other</option></select></div>
+   <div class="actions"><button class="btn secondary" onclick="clearFilters()">Clear filters</button></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:14px"><div class="section-head"><div><h3 style="margin:0">All expense records</h3><p id="tableCount">0 records</p></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="expenseRows"><tr><td colspan="5" class="empty">No expenses recorded yet.</td></tr></tbody></table></div>
+ </div>
+</section>
+
+<section id="insights">
+ <div class="section-head"><div><h2>Spending insights</h2><p>Category totals and a quick view of spending patterns.</p></div></div>
+ <div class="two">
+  <div class="card"><h3 style="margin-top:0">Category-wise totals</h3><div id="categoryBars"><div class="empty">Add expenses to see category analysis.</div></div></div>
+  <div class="card"><h3 style="margin-top:0">Summary calculations</h3><div class="step"><div class="num">1</div><div><strong>Total expenses</strong><div class="metric-sub">Sum of every recorded expense amount.</div><div id="calcTotal" class="positive">₹0.00</div></div></div>
+   <div class="step"><div class="num">2</div><div><strong>Remaining budget</strong><div class="metric-sub">Entered budget − total expenses.</div><div id="calcRemaining">₹0.00</div></div></div>
+   <div class="step"><div class="num">3</div><div><strong>Highest-spending category</strong><div class="metric-sub">Category with the largest accumulated total.</div><div id="calcTop">—</div></div></div>
+   <div id="alertBox" class="notice">Budget status will appear here.</div>
+  </div>
+ </div>
+</section>
+
+<section id="data">
+ <div class="section-head"><div><h2>CSV data centre</h2><p>Export your records or import a previously saved CSV file.</p></div></div>
+ <div class="three">
+  <div class="card"><h3 style="margin-top:0">⬇ Export CSV</h3><p class="metric-sub">Download all saved expense records as <b>expenses.csv</b>. Opens in Excel, Google Sheets, or other spreadsheet software.</p><button class="btn" onclick="exportCSV()">Download CSV</button></div>
+  <div class="card"><h3 style="margin-top:0">⬆ Import CSV</h3><p class="metric-sub">Import rows using the columns: date, amount, category, description. Choose whether to replace or append.</p><input id="csvFile" type="file" accept=".csv,text/csv"><select id="importMode" style="margin-top:9px"><option value="append">Append to current records</option><option value="replace">Replace current records</option></select><div class="actions"><button class="btn secondary" onclick="importCSV()">Import file</button></div></div>
+  <div class="card"><h3 style="margin-top:0">🧹 Data controls</h3><p class="metric-sub">Your data is stored locally in this browser using localStorage. Clearing browser site data may remove it.</p><button class="btn danger" onclick="clearAll()">Delete all records</button></div>
+ </div>
+ <div class="notice" style="margin-top:14px">CSV format: <b>date,amount,category,description</b>. Export is UTF-8 with a header row. Keep a backup of important records. Do not upload real personal financial records to a public repository.</div>
+</section>
+
+<section id="project">
+ <div class="section-head"><div><h2>Project documentation</h2><p>Milestone 2 topic and subtopics, presented as an interactive project overview.</p></div></div>
+ <div class="three">
+  <div class="card info-card"><h3>1. Project overview</h3><p><b>Problem:</b> personal expenses can be difficult to track consistently.</p><p><b>Solution:</b> a menu-driven expense analyzer that stores records and produces spending summaries. Each record contains date, amount, category, and description.</p></div>
+  <div class="card info-card"><h3>2. Objectives & features</h3><ul><li>Add expenses with validated amount and category.</li><li>Save and reload records using CSV.</li><li>View all expense records.</li><li>Calculate total expenses and remaining budget.</li><li>Show category totals and highest-spending category.</li><li>Warn when spending exceeds budget.</li></ul></div>
+  <div class="card info-card"><h3>3. Program workflow</h3><div class="step"><div class="num">1</div><span>Enter a positive monthly budget.</span></div><div class="step"><div class="num">2</div><span>Load previously saved expense records.</span></div><div class="step"><div class="num">3</div><span>Add expenses, view records, or view summary.</span></div><div class="step"><div class="num">4</div><span>Return to the menu or exit the application.</span></div></div>
+  <div class="card info-card"><h3>4. Python concepts used</h3><ul><li>Variables and numeric data types.</li><li>Lists and dictionaries for records.</li><li>Functions for reusable tasks.</li><li>if/elif/else and while loops.</li><li>csv and os modules for file storage.</li><li>datetime.date for dates.</li><li>try/except for invalid input and file errors.</li></ul></div>
+  <div class="card info-card"><h3>5. Core calculations</h3><ul><li><b>Total expenses</b> = sum of recorded amounts.</li><li><b>Remaining budget</b> = entered budget − total expenses.</li><li>Category totals are accumulated in a dictionary.</li><li>Highest-spending category has the largest total.</li><li>Spending above budget triggers an alert.</li></ul></div>
+  <div class="card info-card"><h3>6. Testing & verification</h3><p>The project report records <b>8 tests passed, 0 failures</b> using <code>python -m unittest -v</code>.</p><p>Coverage: totals, remaining budget, exact-budget boundary, exceeded budget, category totals, highest category, empty records, and CSV save/load. Manual checks should include invalid amount and invalid menu choice.</p></div>
+  <div class="card info-card"><h3>7. Team contributions</h3><ul><li>Sanjana Sen — user input and expense recording.</li><li>Riddhima Gupta — expense analysis and calculations.</li><li>Sarthak — testing, integration, and documentation.</li></ul><p><b></div>
+  <div class="card info-card"><h3>8. Limitations & future scope</h3><p>The current Python summary uses all CSV records and does not filter to the current calendar month.</p><ul><li>Month-wise filtering.</li><li>Edit/delete records.</li><li>Graphical charts.</li><li>Exportable summaries.</li><li>Graphical user interface.</li></ul></div>
+  <div class="card info-card"><h3>9. Conclusion</h3><p>The project demonstrates Python fundamentals and file handling by converting individual expense entries into budget and category summaries. The automated tests are reported as passing; the team should understand each function before the viva.</p></div>
+ </div>
+ <div class="notice" style="margin-top:14px"><b>Implementation note:</b> This website is an interactive browser-based companion to the Python project. It includes month filters, edit/delete, charts, and CSV import/export as website enhancements; these should not be confused with features already implemented in the original Python program.</div>
+</section>
+</main>
+<footer>Personal Expense & Budget Analyzer · Milestone 2 · Data remains in your browser until exported.</footer>
+<script>
+const KEY='expenseAnalyzerRecords_v1', BKEY='expenseAnalyzerBudget_v1';
+let records=JSON.parse(localStorage.getItem(KEY)||'[]'); let budget=Number(localStorage.getItem(BKEY)||0);
+const $=id=>document.getElementById(id);
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const today=()=>new Date().toISOString().slice(0,10);
+$('date').value=today(); $('budgetInput').value=budget||'';
+function persist(){localStorage.setItem(KEY,JSON.stringify(records));localStorage.setItem(BKEY,String(budget));}
+function visibleRecords(){let m=$('filterMonth').value,c=$('filterCategory').value;return records.filter(r=>(!m||r.date.startsWith(m))&&(!c||r.category===c)).sort((a,b)=>b.date.localeCompare(a.date));}
+function saveBudget(){let v=Number($('budgetInput').value);if(!Number.isFinite(v)||v<=0){alert('Enter a budget greater than zero.');return;}budget=v;persist();render();}
+function saveExpense(e){e.preventDefault();let amount=Number($('amount').value),date=$('date').value,category=$('category').value;if(!date||!category||!Number.isFinite(amount)||amount<=0){alert('Enter a valid date, positive amount, and category.');return;}let id=$('editId').value;let row={id:id||String(Date.now())+'_'+Math.random().toString(16).slice(2),date,amount,category,description:$('description').value.trim()};if(id){records=records.map(r=>r.id===id?row:r);}else records.push(row);persist();resetForm();render();}
+function resetForm(){$('expenseForm').reset();$('date').value=today();$('editId').value='';$('formTitle').textContent='Add an expense';$('submitExpense').textContent='Add expense';}
+function editExpense(id){let r=records.find(x=>x.id===id);if(!r)return;$('editId').value=id;$('date').value=r.date;$('amount').value=r.amount;$('category').value=r.category;$('description').value=r.description;$('formTitle').textContent='Edit expense';$('submitExpense').textContent='Save changes';$('transactions').scrollIntoView({behavior:'smooth'});}
+function deleteExpense(id){if(!confirm('Delete this expense record?'))return;records=records.filter(r=>r.id!==id);persist();render();}
+function clearFilters(){$('filterMonth').value='';$('filterCategory').value='';render();}
+function render(){let list=visibleRecords(),total=records.reduce((s,r)=>s+r.amount,0),remaining=budget-total,groups={};records.forEach(r=>groups[r.category]=(groups[r.category]||0)+r.amount);let entries=Object.entries(groups).sort((a,b)=>b[1]-a[1]),top=entries[0];$('budgetMetric').textContent=money(budget);$('totalMetric').textContent=money(total);$('expenseCount').textContent=records.length+' record'+(records.length===1?'':'s');$('remainingMetric').textContent=money(remaining);$('remainingMetric').className='metric '+(remaining<0?'negative':'positive');$('remainingText').textContent=remaining<0?'Over budget by '+money(-remaining):'Available to spend';$('topMetric').textContent=top?top[0]:'—';$('topAmount').textContent=top?money(top[1]):'No expenses yet';let pct=budget>0?total/budget*100:0;$('usageText').textContent=(Math.round(pct*10)/10)+'%';$('progressFill').style.width=Math.min(pct,100)+'%';$('budgetProgress').classList.toggle('over',pct>100);$('budgetMessage').textContent=budget<=0?'Set a budget to begin tracking.':pct>100?'Budget exceeded. Review your spending.':money(Math.max(0,remaining))+' remaining';$('calcTotal').textContent=money(total);$('calcRemaining').textContent=money(remaining);$('calcTop').textContent=top?top[0]+' — '+money(top[1]):'—';$('alertBox').textContent=budget<=0?'Set a budget to activate the budget alert.':total>budget?'⚠ Budget exceeded by '+money(total-budget)+'.':total===budget?'You have reached your budget exactly.':'Within budget. You have '+money(remaining)+' remaining.';$('alertBox').style.borderColor=total>budget?'#a34b60':'#2d4a72';$('tableCount').textContent=list.length+' of '+records.length+' records shown';$('expenseRows').innerHTML=list.length?list.map(r=>`<tr><td>${esc(r.date)}</td><td><span class="tag">${esc(r.category)}</span></td><td>${esc(r.description||'—')}</td><td><b>${money(r.amount)}</b></td><td><button class="btn secondary" style="padding:6px 9px" onclick="editExpense('${r.id}')">Edit</button> <button class="btn danger" style="padding:6px 9px" onclick="deleteExpense('${r.id}')">Delete</button></td></tr>`).join(''):'<tr><td colspan="5" class="empty">No matching expenses found.</td></tr>';$('categoryBars').innerHTML=entries.length?entries.map(([c,v])=>`<div class="bar-row"><span>${esc(c)}</span><div class="bar"><span style="width:${total?Math.max(2,v/total*100):0}%"></span></div><strong>${money(v)}</strong></div>`).join(''):'<div class="empty">Add expenses to see category analysis.</div>';}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function csvCell(v){let s=String(v??'');return '"'+s.replace(/"/g,'""')+'"';}
+function exportCSV(){let rows=[['date','amount','category','description'],...records.map(r=>[r.date,r.amount,r.category,r.description])];let csv='\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n');let a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.href=url;a.download='expenses.csv';a.click();URL.revokeObjectURL(url);}
+function parseCSV(text){let rows=[],row=[],field='',quoted=false;for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];if(quoted){if(c==='"'&&n==='"'){field+='"';i++;}else if(c==='"')quoted=false;else field+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(field);field='';}else if(c==='\n'){row.push(field);rows.push(row);row=[];field='';}else if(c!=='\r')field+=c;}if(field.length||row.length){row.push(field);rows.push(row);}return rows;}
+async function importCSV(){let f=$('csvFile').files[0];if(!f){alert('Choose a CSV file first.');return;}try{let rows=parseCSV((await f.text()).replace(/^\uFEFF/,''));if(!rows.length)throw Error('The file is empty.');let header=rows.shift().map(x=>x.trim().toLowerCase());let idx=['date','amount','category','description'].map(k=>header.indexOf(k));if(idx.some(x=>x<0))throw Error('CSV must contain date, amount, category, description columns.');let imported=rows.filter(r=>r.length&&r.some(x=>x.trim())).map(r=>({id:String(Date.now())+'_'+Math.random().toString(16).slice(2),date:r[idx[0]],amount:Number(r[idx[1]]),category:r[idx[2]],description:r[idx[3]]||''}));if(imported.some(r=>!/^\d{4}-\d{2}-\d{2}$/.test(r.date)||!Number.isFinite(r.amount)||r.amount<=0||!r.category))throw Error('One or more rows contain an invalid date, amount, or category. No data was imported.');records=$('importMode').value==='replace'?imported:records.concat(imported);persist();render();$('csvFile').value='';alert(imported.length+' records imported successfully.');}catch(e){alert('Import failed: '+e.message);}}
+function clearAll(){if(!confirm('Permanently delete all saved expense records from this browser?'))return;records=[];persist();render();resetForm();}
+function setDemo(){if(records.length&&!confirm('Add sample records to the existing list?'))return;let base=new Date();let d=n=>{let x=new Date(base);x.setDate(x.getDate()-n);return x.toISOString().slice(0,10)};records.push({id:'demo1',date:d(1),amount:180,category:'Food',description:'Lunch'},{id:'demo2',date:d(2),amount:75,category:'Transport',description:'Metro'},{id:'demo3',date:d(3),amount:950,category:'Education',description:'Books'},{id:'demo4',date:d(4),amount:420,category:'Food',description:'Groceries'},{id:'demo5',date:d(5),amount:600,category:'Entertainment',description:'Movie'});if(!budget){budget=5000;$('budgetInput').value=budget;}persist();render();}
+render();
+</script>
+</body></html>
